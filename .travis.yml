@@ -1,0 +1,18 @@
+os: linux
+sudo: false
+language: python
+python:
+    - "3.7"
+
+install:
+    - pip install pipenv
+    - pipenv install
+
+script:
+    - echo SUCCESS
+
+cache:
+    - pip
+
+notifications:
+    email: false
