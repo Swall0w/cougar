@@ -1,0 +1,31 @@
+ [[source]]
+ name = "cougar"
+ url = "https://pypi.org/simple"
+ verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+pylint = "*"
+mypy = "*"
+coverage = "*"
+pycodestyle = "*"
+autopep8 = "*"
+
+[packages]
+torch = "*"
+torchvision = "*"
+onnxruntime = "*"
+tensorboardx = "*"
+numpy = "*"
+scipy = "*"
+tqdm = "*"
+onnx = "*"
+opencv-python = "*"
+matplotlib = "*"
+cython="*"
+tensorflow="*"
+nvidia-ml-py3="*"
+
+[requires]
+python_version = "3.7"
