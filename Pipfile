@@ -26,6 +26,7 @@ matplotlib = "*"
 cython="*"
 tensorflow="*"
 nvidia-ml-py3="*"
+hjson = "*"
 
 [requires]
 python_version = "3.7"
