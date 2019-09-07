@@ -27,6 +27,8 @@ cython="*"
 tensorflow="*"
 nvidia-ml-py3="*"
 hjson = "*"
+h5py = "==2.9.0"
+cougar = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"
