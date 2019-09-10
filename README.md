@@ -6,7 +6,9 @@ PyTorch deep learning Vision library for fast prototyping
 
 ## Features
 ### Model
-- [ ] DeepSORT
+|Name  |Implemented  |Type Hints  | Testing | Document | Train| Evaluation | Inference|
+|---|---|---|---|---|---|---|---|
+| DeepSORT|:heavy_check_mark:|| | ||||
 
 ### Module
 |Name  |Implemented  |Type Hints  | Test | Document |

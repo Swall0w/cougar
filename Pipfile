@@ -29,6 +29,7 @@ nvidia-ml-py3="*"
 hjson = "*"
 h5py = "==2.9.0"
 cougar = {editable = true,path = "."}
+scikit-learn = "*"
 
 [requires]
 python_version = "3.7"
