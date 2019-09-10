@@ -14,6 +14,6 @@ PyTorch deep learning Vision library for fast prototyping
 ### Loss
 |Name  |Implemented  |Type Hints  | Test | Document |
 |---|---|---|---|---|
-|Focal Loss  |[x]|[x]  |[x]| [ ]|
-|Contrastive Loss  |[x]  |[ ]  |[ ] | [ ] |
-|Triplet Loss  |[x]  |[ ]  | [ ] | [ ]|
+|Focal Loss  |:heavy_check_mark:|:heavy_check_mark: |:heavy_check_mark:| |
+|Contrastive Loss  |:heavy_check_mark:  |  | |  |
+|Triplet Loss  |:heavy_check_mark:  |  |  | |
