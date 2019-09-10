@@ -6,6 +6,12 @@ PyTorch deep learning Vision library for fast prototyping
 
 ## Features
 ### Model
+- [ ] DeepSORT
 
 ### Module
+- [ ] Siamese Network
+
+### Loss
 - [x] Focal Loss
+- [ ] Contrastive Loss
+- [ ] Triplet Loss
