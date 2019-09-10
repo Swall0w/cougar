@@ -12,6 +12,8 @@ PyTorch deep learning Vision library for fast prototyping
 - [ ] Siamese Network
 
 ### Loss
-- [x] Focal Loss
-- [ ] Contrastive Loss
-- [ ] Triplet Loss
+|Name  |Implemented  |Type Hints  | Test | Document |
+|---|---|---|---|---|
+|Focal Loss  |[x]|[x]  |[x]| [ ]|
+|Contrastive Loss  |[x]  |[ ]  |[ ] | [ ] |
+|Triplet Loss  |[x]  |[ ]  | [ ] | [ ]|
