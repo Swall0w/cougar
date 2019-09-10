@@ -7,31 +7,42 @@ from cougar.graphs.models.tracking.deep_sort import (Detection,
                                                      Tracker,
                                                      non_max_suppression,
                                                      )
+from cougar.graphs.modules import SiameseNetwork
 
 
 class DeepSORT(object):
-    def __init__(self, wt_path=None):
-        if wt_path is not None:
-            self.encoder = torch.load(wt_path)
-            print(self.encoder)
-        else:
-            self.encoder = torch.load('ckpts/model640.pt')
+    def __init__(self, wt_path=None, cuda=True):
+        device = torch.device('cpu')
+        encoder = SiameseNetwork()
 
-        self.encoder = self.encoder.cuda()
+        if wt_path is not None:
+            encoder_params = torch.load(wt_path, map_location=device)
+        else:
+            raise ValueError('Need wt_path: {}'.format(wt_path))
+        encoder.load_state_dict(encoder_params)
+
+        self.encoder = encoder
+
+        self.cuda = cuda
+        if self.cuda:
+            self.encoder = self.encoder.cuda()
+
         self.encoder = self.encoder.eval()
         print("Deep sort model loaded")
 
         self.metric = NearestNeighborDistanceMetric("cosine", .5, 100)
-        print('*' * 20)
-        print(self.metric)
         self.tracker = Tracker(self.metric)
 
-        self.gaussian_mask = get_gaussian_mask().cuda()
+        if self.cuda:
+            self.gaussian_mask = get_gaussian_mask().cuda()
+        else:
+            self.gaussian_mask = get_gaussian_mask()
 
-        self.transforms = torchvision.transforms.Compose([ \
-            torchvision.transforms.ToPILImage(), \
-            torchvision.transforms.Resize((128, 128)), \
-            torchvision.transforms.ToTensor()])
+        self.transforms = torchvision.transforms.Compose([
+            torchvision.transforms.ToPILImage(),
+            torchvision.transforms.Resize((128, 128)),
+            torchvision.transforms.ToTensor()
+        ])
 
     def reset_tracker(self):
         self.tracker = Tracker(self.metric)
@@ -112,12 +123,10 @@ class DeepSORT(object):
         xmax = abs(int(xmax))
 
         crop = frame[ymin:ymax, xmin:xmax, :]
-        # crop = crop.astype(np.uint8)
-
-        # print(crop.shape,[xmin,ymin,xmax,ymax],frame.shape)
 
         crop = self.transforms(crop)
-        crop = crop.cuda()
+        if self.cuda:
+            crop = crop.cuda()
 
         gaussian_mask = self.gaussian_mask
 
@@ -131,7 +140,7 @@ class DeepSORT(object):
 
         return features, corrected_crop
 
-    def run_deep_sort(self, frame, out_scores, out_boxes):
+    def update(self, frame, out_scores, out_boxes):
 
         if out_boxes == []:
             self.tracker.predict()
@@ -142,7 +151,10 @@ class DeepSORT(object):
         detections = np.array(out_boxes)
         # features = self.encoder(frame, detections.copy())
 
-        processed_crops = self.pre_process(frame, detections).cuda()
+        if self.cuda:
+            processed_crops = self.pre_process(frame, detections).cuda()
+        else:
+            processed_crops = self.pre_process(frame, detections)
         processed_crops = self.gaussian_mask * processed_crops
 
         features = self.encoder.forward_once(processed_crops)

@@ -10,14 +10,11 @@ from cougar.graphs.models.tracking.deep_sort import tracker
 from cougar.graphs.models.tracking.deep_sort.tracker import Tracker
 
 from cougar.graphs.models.tracking.deep_sort import linear_assignment
-from cougar.graphs.models.tracking.deep_sort.linear_assignment import (INFTY_COST, min_cost_matching, matching_cascade,
-                                                                       gate_cost_matrix,)
-from cougar.graphs.models.tracking.deep_sort.iou_matching import iou, iou_cost
-from cougar.graphs.models.tracking.deep_sort.deepsort import DeepSORT, get_gaussian_mask
+from cougar.graphs.models.tracking.deep_sort import iou_matching
 from cougar.graphs.models.tracking.deep_sort.preprocessing import non_max_suppression
+from cougar.graphs.models.tracking.deep_sort.deepsort import DeepSORT, get_gaussian_mask
 
 
 __all__ = ['Detection', 'KalmanFilter', 'NearestNeighborDistanceMetric', 'Track', 'TrackState', 'Tracker',
-           'linear_assignment', 'INFTY_COST', 'min_cost_matching', 'matching_cascade', 'gate_cost_matrix',
-           'iou', 'iou_cost', 'DeepSORT', 'get_gaussian_mask', 'non_max_suppression',
+           'linear_assignment', 'DeepSORT', 'get_gaussian_mask', 'non_max_suppression',
            ]

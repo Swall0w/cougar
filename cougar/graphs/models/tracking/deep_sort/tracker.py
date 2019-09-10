@@ -1,8 +1,8 @@
 import numpy as np
 from cougar.graphs.models.tracking.deep_sort import KalmanFilter
-from cougar.graphs.models.tracking.deep_sort import min_cost_matching, matching_cascade, gate_cost_matrix
+from cougar.graphs.models.tracking.deep_sort import linear_assignment
 from cougar.graphs.models.tracking.deep_sort import Track
-from cougar.graphs.models.tracking.deep_sort import iou_cost
+from cougar.graphs.models.tracking.deep_sort import iou_matching
 
 
 class Tracker(object):
@@ -95,7 +95,7 @@ class Tracker(object):
             features = np.array([dets[i].feature for i in detection_indices])
             targets = np.array([tracks[i].track_id for i in track_indices])
             cost_matrix = self.metric.distance(features, targets)
-            cost_matrix = gate_cost_matrix(
+            cost_matrix = linear_assignment.gate_cost_matrix(
                 self.kf, cost_matrix, tracks, dets, track_indices,
                 detection_indices)
 
@@ -109,7 +109,7 @@ class Tracker(object):
 
         # Associate confirmed tracks using appearance features.
         matches_a, unmatched_tracks_a, unmatched_detections = \
-            matching_cascade(
+            linear_assignment.matching_cascade(
                 gated_metric, self.metric.matching_threshold, self.max_age,
                 self.tracks, detections, confirmed_tracks)
 
@@ -121,8 +121,8 @@ class Tracker(object):
             k for k in unmatched_tracks_a if
             self.tracks[k].time_since_update != 1]
         matches_b, unmatched_tracks_b, unmatched_detections = \
-            min_cost_matching(
-                iou_cost, self.max_iou_distance, self.tracks,
+            linear_assignment.min_cost_matching(
+                iou_matching.iou_cost, self.max_iou_distance, self.tracks,
                 detections, iou_track_candidates, unmatched_detections)
 
         matches = matches_a + matches_b
