@@ -25,6 +25,7 @@ setup(
     version=version,
     description="PyTorch deep learning Vision library for fast prototyping",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author=author,
     url=url,
     include_package_data=True,

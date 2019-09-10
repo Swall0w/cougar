@@ -7,17 +7,17 @@ PyTorch deep learning Vision library for fast prototyping
 ## Features
 ### Model
 |Name  |Implemented  |Type Hints  | Testing | Document | Train| Evaluation | Inference|
-|---|---|---|---|---|---|---|---|
-| DeepSORT|:heavy_check_mark:|| | ||||
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| DeepSORT|&#9745;|&#9744;|&#9744;|&#9744;|&#9744;|&#9744;|&#9744;|
 
 ### Module
-|Name  |Implemented  |Type Hints  | Test | Document |
-|---|---|---|---|---|
-| Siamese Network  |:heavy_check_mark:|:heavy_check_mark: | | |
+|Name  |Implemented  |Type Hints  | Testing | Document |
+|:---:|:---:|:---:|:---:|:---:|
+| Siamese Network  |&#9745;|&#9745;|&#9744;|&#9744;|
 
 ### Loss
 |Name  |Implemented  |Type Hints  | Test | Document |
-|---|---|---|---|---|
-|Focal Loss  |:heavy_check_mark:|:heavy_check_mark: |:heavy_check_mark:| |
-|Contrastive Loss  |:heavy_check_mark:  |  | |  |
-|Triplet Loss  |:heavy_check_mark:  |  |  | |
+|:---:|:---:|:---:|:---:|:---:|
+|Focal Loss  |&#9745;|&#9745;|&#9745;|&#9744;|
+|Contrastive Loss  |&#9745;|&#9744;|&#9744;|&#9744;|
+|Triplet Loss  |&#9745;|&#9744;|&#9744;|&#9744;|

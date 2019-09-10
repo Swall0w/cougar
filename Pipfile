@@ -11,6 +11,8 @@ mypy = "*"
 coverage = "*"
 pycodestyle = "*"
 autopep8 = "*"
+wheel = "*"
+twine = "*"
 
 [packages]
 torch = "*"
