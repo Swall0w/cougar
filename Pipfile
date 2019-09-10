@@ -1,4 +1,4 @@
- [[source]]
+[[source]]
  name = "cougar"
  url = "https://pypi.org/simple"
  verify_ssl = true
@@ -32,3 +32,6 @@ cougar = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"
+
+[scripts]
+test = "python -m pytest tests/"

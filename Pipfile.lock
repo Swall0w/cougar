@@ -76,9 +76,9 @@
         },
         "gast": {
             "hashes": [
-                "sha256:fe939df4583692f0512161ec1c880e0a10e71e6a232da045ab8edd3756fbadf0"
+                "sha256:cc987dad3bea3104cd1cc4832c7d864023eb4578043b63ee061c7b42febd4c16"
             ],
-            "version": "==0.2.2"
+            "version": "==0.3.1"
         },
         "google-pasta": {
             "hashes": [
