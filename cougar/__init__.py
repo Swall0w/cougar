@@ -4,7 +4,7 @@ __author__ = 'Swall0w'
 __url__ = 'https://github.com/Swall0w/cougar'
 
 
-from cougar import module
+from cougar import graphs
 
 
-__all__ = ['module', ]
+__all__ = ['graphs', ]

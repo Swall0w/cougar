@@ -1,12 +1,6 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-from torch.autograd import Variable
-
-import os,sys,random,time
-
-from cougar.module import FocalLoss
-#import pytest
+from cougar.graphs.loss import FocalLoss
 
 
 def test_focal_loss():
