@@ -9,7 +9,9 @@ PyTorch deep learning Vision library for fast prototyping
 - [ ] DeepSORT
 
 ### Module
-- [ ] Siamese Network
+|Name  |Implemented  |Type Hints  | Test | Document |
+|---|---|---|---|---|
+| Siamese Network  |:heavy_check_mark:|:heavy_check_mark: | | |
 
 ### Loss
 |Name  |Implemented  |Type Hints  | Test | Document |
