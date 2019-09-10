@@ -1,0 +1,1 @@
+from cougar.graphs.models.tracking import deep_sort
