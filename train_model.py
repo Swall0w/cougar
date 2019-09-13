@@ -9,7 +9,7 @@ import json
 from cougar.common import setup_logger
 
 
-def main(config):
+def main(config, local_rank, distributed):
     pass
 
 
@@ -60,6 +60,4 @@ if __name__ == '__main__':
     logger.info("Saving config into: {}".format(output_config_path))
     dump_config(output_config_path, config)
 
-
-#    main(config)
-
+    main(config, args.local_rank, args.distributed)

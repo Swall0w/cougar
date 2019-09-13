@@ -4,11 +4,8 @@
         "output_dir": "./experiments",
         "name": "mnist_exp",
     },
-    "name": "Mnist_LeNet",
-    "n_gpu": 1,
-
-    "arch": {
-        "type": "MnistModel",
+    "model": {
+        "type": "MNIST",
         "args": {}
     },
     "data_loader": {
