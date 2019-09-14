@@ -8,7 +8,7 @@ from cougar.common import box_utils
 class MultiBoxLoss(nn.Module):
     def __init__(self,
                  neg_pos_ratio: int,
-                 classification_loss: nn.Modue = nn.CrossEntropyLoss
+                 classification_loss: nn.Module = nn.CrossEntropyLoss
                  ):
         """Implement SSD MultiBox Loss.
         Basically, MultiBox loss combines classification loss

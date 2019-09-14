@@ -19,4 +19,4 @@ def test_SSDBoxPredictor():
     assert cls_logits.shape[1] == 8732
     assert cls_logits.shape[2] == num_classes
     assert cls_logits.shape[1] == bbox_pred.shape[1]
-    assert bbox_pred.shape[1] == 4
+    assert bbox_pred.shape[2] == 4
