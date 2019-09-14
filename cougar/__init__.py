@@ -6,9 +6,10 @@ __url__ = 'https://github.com/Swall0w/cougar'
 
 from cougar import graphs
 from cougar import common
-from cougar import agents
 from cougar import metrics
+from cougar import engine
+from cougar import agents
 
 
-__all__ = ['graphs', 'common',
+__all__ = ['graphs', 'common', 'metrics', 'engine', 'agents',
            ]
