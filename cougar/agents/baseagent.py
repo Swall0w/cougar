@@ -2,11 +2,24 @@
 The Base Agent class, where all other agents inherit from, that contains definitions for all the necessary functions
 """
 from collections import OrderedDict
+import logging
+from pathlib import Path
 
 
 class BaseAgent(object):
-    def __init__(self, config: OrderedDict):
+    def __init__(self, config: OrderedDict, **kwargs):
         self.config = config
+        self.logger = logging.getLogger('{}.Agent'.format(
+            config['experiment']['name']
+        ))
+
+        if 'tensorboard' in config['trainer']:
+            import tensorboardX
+            self.summary_writer = tensorboardX.SummaryWriter(log_dir=str(
+                Path(config['experiment']['output_dir']) / config['experiment']['name'] / 'tf_logs/'
+            ))
+        else:
+            self.summary_writer = None
 
     def load_checkpoint(self, file_name: str):
         """

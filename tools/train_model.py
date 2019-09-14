@@ -7,10 +7,14 @@ from cougar.common import collect_env_info
 from pathlib import Path
 import json
 from cougar.common import setup_logger
+from cougar.agents import build_agent
 
 
-def main(config, local_rank, distributed):
-    pass
+def main(config, args):
+    agent_class = build_agent(config)
+    agent = agent_class(config, args)
+    agent.run()
+    agent.finalize()
 
 
 def arg():
@@ -29,6 +33,7 @@ if __name__ == '__main__':
     args = arg()
     num_gpus = int(os.environ["WORLD_SIZE"]) if "WORLD_SIZE" in os.environ else 1
     args.distributed = num_gpus > 1
+    args.num_gpus = num_gpus
 
     if args.distributed:
         torch.cuda.set_device(args.local_rank)
@@ -60,4 +65,4 @@ if __name__ == '__main__':
     logger.info("Saving config into: {}".format(output_config_path))
     dump_config(output_config_path, config)
 
-    main(config, args.local_rank, args.distributed)
+    main(config, args)

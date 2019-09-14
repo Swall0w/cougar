@@ -4,8 +4,9 @@ from collections import OrderedDict
 
 
 __all__ = ['BaseAgent', 'ObjectDetectionAgent',
+           'build_agent'
           ]
 
 
 def build_agent(config: OrderedDict):
-    pass
+    return eval('{}Agent'.format(config['experiment']['task']))
