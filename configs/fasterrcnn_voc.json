@@ -2,11 +2,13 @@
     "experiment": {
         "task": "ObjectDetection",
         "output_dir": "./experiments",
-        "name": "ssd300_exp"
+        "name": "fasterrcnn_exp"
     },
     "model": {
-        "device": "cuda",
-        "type": "GeneralSSD",
+        "device": "cpu",
+        "type": "TwoStage",
+        "name": "resnet50_fpn",
+        "pretrained": "True"
     },
     "dataset": {
         "type": "VOCDataset",
@@ -16,13 +18,10 @@
         "labels": "data/labels/voc.names"
     },
     "data_loader": {
-        "type": "VOCD",
-        "args":{
-            "data_dir": "data/",
-            "batch_size": 32,
+        "train":{
             "shuffle": true,
-            "validation_split": 0.1,
-            "num_workers": 2
+            "num_workers": 2,
+            "pin_memory": "true"
         }
     },
     "loss": "nll_loss",
@@ -30,6 +29,7 @@
         "my_metric", "my_metric2"
     ],
     "trainer": {
+        "batch_size": 32,
         "optimizer": {
             "type": "SGD",
             "args":{
@@ -39,10 +39,12 @@
             }
         },
         "lr_scheduler": {
-            "type": "MultiStepLR",
+            "type": "WarmupMultiStepLR",
             "args": {
                 "milestones": [80000, 100000],
-                "gamma": 0.1
+                "gamma": 0.1,
+                "warmup_factor": 3,
+                "warmup_iters": 500
             }
         },
         "max_iter": 120000,
@@ -53,5 +55,12 @@
 
         "tensorboard": {
         }
+    },
+    "tester": {
+        "nms_threshold": 0.45,
+        "confidence_threshold": 0.01,
+        "max_per_class": -1,
+        "max_per_image": 100,
+        "batch_size": 10
     }
 }

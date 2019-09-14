@@ -4,12 +4,20 @@ from argparse import ArgumentParser
 import torch
 import logging
 from pathlib import Path
+from cougar.common import read_labels
+from cougar.common import comm
+from cougar.graphs.models.object_detection import build_detection_model
+from cougar.solver import make_optimizer, make_lr_scheduler
+from cougar.common import CheckPointer
+from cougar.data import make_data_loader
+from cougar.engine import do_iter_train
 
 
 class ObjectDetectionAgent(BaseAgent):
     def __init__(self, config: OrderedDict, args: ArgumentParser):
         super().__init__(config)
         self.args = args
+        self.labels = read_labels(self.config['dataset']['labels'])
 
     def load_checkpoint(self, file_name: str):
         pass
@@ -29,13 +37,13 @@ class ObjectDetectionAgent(BaseAgent):
         logger = logging.getLogger('{}.trainer'.format(
             self.config['experiment']['name']
         ))
-        model = build_detection_model(self.config)
+        model = build_detection_model(self.config, len(self.labels))
         device = torch.device(self.config["model"]["device"])
         model.to(device)
 
         lr = self.config['trainer']['optimizer']['args']['lr'] * self.args.num_gpus # Scale by num gpus
-        optimizer = make_lr_scheduler(self.config, model, lr)
-        milestones = [step // args.num_gpus for step in self.config['trainer']['lr_scheduler']['args']['milestones']]
+        optimizer = make_optimizer(self.config, model, lr)
+        milestones = [step // self.args.num_gpus for step in self.config['trainer']['lr_scheduler']['args']['milestones']]
         scheduler = make_lr_scheduler(self.config, optimizer, milestones)
 
         # Initialize mixed-precision training
@@ -53,16 +61,16 @@ class ObjectDetectionAgent(BaseAgent):
         arguments = dict()
         arguments["iteration"] = 0
         output_dir = str(Path(self.config['experiment']['output_dir']) / self.config['experiment']['name'])
-        save_to_disk = dist_util.get_rank() == 0
+        save_to_disk = comm.get_rank() == 0
         checkpointer = CheckPointer(model, optimizer, scheduler, output_dir, save_to_disk, logger)
         extra_checkpoint_data = checkpointer.load()
         arguments.update(extra_checkpoint_data)
 
-        max_iter = self.config['trainer']['max_iter'] // args.num_gpus
+        max_iter = self.config['trainer']['max_iter'] // self.args.num_gpus
         train_loader = make_data_loader(
             self.config,
             is_train=True,
-            distributed=args.distributed,
+            distributed=self.args.distributed,
             max_iter=max_iter,
             start_iter=arguments['iteration'],
         )
@@ -77,6 +85,7 @@ class ObjectDetectionAgent(BaseAgent):
             device,
             arguments,
             self.args,
+            self.summary_writer
         )
 
     def validate(self):

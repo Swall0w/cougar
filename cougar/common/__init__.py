@@ -6,8 +6,9 @@ from cougar.common.collect_env import collect_env_info
 from cougar.common import model_zoo
 from cougar.common import box_utils
 from cougar.common.checkpoint import CheckPointer
+from cougar.common.metric_logger import SmoothedValue, MetricLogger
 
 
 __all__ = ['read_config', 'read_labels', 'dump_config', 'setup_logger', 'comm', 'collect_env_info', 'model_zoo',
-           'box_utils', 'CheckPointer',
+           'box_utils', 'CheckPointer', 'SmoothedValue', 'MetricLogger',
            ]

@@ -8,8 +8,9 @@ from cougar import graphs
 from cougar import common
 from cougar import metrics
 from cougar import engine
+from cougar import solver
 from cougar import agents
 
 
-__all__ = ['graphs', 'common', 'metrics', 'engine', 'agents',
+__all__ = ['graphs', 'common', 'metrics', 'engine', 'agents', 'solver',
            ]
