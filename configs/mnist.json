@@ -1,6 +1,6 @@
 {
     "experiment": {
-        "task": "classification"
+        "task": "ImageClassification",
         "output_dir": "./experiments",
         "name": "mnist_exp",
     },
