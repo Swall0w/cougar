@@ -13,7 +13,7 @@ class GeneralizedSSD(nn.Module):
             the model
     """
 
-    def __init__(self, backbone, rpn, box_heads, transform):
+    def __init__(self, backbone: nn.Module, box_heads: nn.Module, transform):
         super(GeneralizedSSD, self).__init__()
         self.transform = transform
         self.backbone = backbone
