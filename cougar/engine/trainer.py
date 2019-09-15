@@ -65,7 +65,12 @@ def do_iter_train(cfg, model,
         scheduler.step()
 
         images = images.to(device)
-        targets = targets.to(device)
+        print(images.shape)
+#        print(targets)
+#        print(len(targets))
+#        targets = targets.to(device)
+#        targets = [target.to(device) for target in targets]
+        targets = [target[k].to(device) for target in targets for k, v in target.items()]
         loss_dict = model(images, targets=targets)
         loss = sum(loss for loss in loss_dict.values())
 

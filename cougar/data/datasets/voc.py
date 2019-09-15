@@ -129,7 +129,7 @@ class VOCDetection(VisionDataset):
         if self.transforms is not None:
             img, target = self.transforms(img, target)
 
-        return img, target
+        return img, target, index
 
     def __len__(self):
         return len(self.images)
@@ -232,12 +232,12 @@ class VOCDetectionDataset(VOCDetection):
         self._transforms = transforms
 
     def __getitem__(self, idx):
-        img, target = super(VOCDetectionDataset, self).__getitem__(idx)
+        img, target, idx = super(VOCDetectionDataset, self).__getitem__(idx)
         target = dict(image_id=idx, annotations=target['annotation'])
         if self._transforms is not None:
             img, target = self._transforms(img, target)
             # img = img[[2, 1, 0],:]
-        return img, target
+        return img, target, idx
 
 
 def get_voc(root: str, image_set: str, transforms):

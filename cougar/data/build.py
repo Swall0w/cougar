@@ -6,25 +6,22 @@ from cougar.data import samplers
 from cougar.data.datasets import build_dataset
 from cougar.data.transforms import build_transforms
 from distutils.util import strtobool
+from cougar.structures.image_list import to_image_list
 
 
 class BatchCollator(object):
-    def __init__(self, is_train=True):
+    def __init__(self, is_train=True, size_divisible=0):
         self.is_train = is_train
+        self.size_divisible = size_divisible
 
     def __call__(self, batch):
         transposed_batch = list(zip(*batch))
         images = default_collate(transposed_batch[0])
+#        images = to_image_list(transposed_batch[0], self.size_divisible)
         img_ids = default_collate(transposed_batch[2])
-
-#        if self.is_train:
-#            list_targets = transposed_batch[1]
-#            targets = Container(
-#                {key: default_collate([d[key] for d in list_targets]) for key in list_targets[0]}
-#            )
-#        else:
-#            targets = None
         targets = transposed_batch[1]
+#        img_ids = transposed_batch[2]
+
         return images, targets, img_ids
 
 
@@ -53,12 +50,25 @@ def make_data_loader(cfg, is_train=True, distributed=False, max_iter=None, start
             sampler = torch.utils.data.sampler.SequentialSampler(dataset)
 
         batch_size = cfg['trainer']['batch_size'] if is_train else cfg['tester']['batch_size']
-        batch_sampler = torch.utils.data.sampler.BatchSampler(sampler=sampler, batch_size=batch_size, drop_last=False)
-        if max_iter is not None:
-            batch_sampler = samplers.IterationBasedBatchSampler(batch_sampler, num_iterations=max_iter, start_iter=start_iter)
+        batch_sampler = torch.utils.data.sampler.BatchSampler(
+            sampler=sampler,
+            batch_size=batch_size,
+            drop_last=False
+        )
 
-        data_loader = DataLoader(dataset, num_workers=cfg["data_loader"]["train"]["num_workers"], batch_sampler=batch_sampler,
-                                 pin_memory=strtobool(cfg['data_loader']['train']['pin_memory']), collate_fn=BatchCollator(is_train))
+        if max_iter is not None:
+            batch_sampler = samplers.IterationBasedBatchSampler(
+                batch_sampler,
+                num_iterations=max_iter,
+                start_iter=start_iter
+            )
+
+        data_loader = DataLoader(dataset,
+                                 num_workers=cfg["data_loader"]["train"]["num_workers"],
+                                 batch_sampler=batch_sampler,
+                                 pin_memory=strtobool(cfg['data_loader']['train']['pin_memory']),
+                                 collate_fn=BatchCollator(is_train),
+                                 )
         data_loaders.append(data_loader)
 
     if is_train:
