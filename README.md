@@ -2,6 +2,8 @@
 # cougar
 PyTorch deep learning Vision library for fast prototyping
 
+This repository is inspired by [Pytorch-Project-Template](https://github.com/moemen95/Pytorch-Project-Template), 
+[maskrcnn_benchmark](https://github.com/facebookresearch/maskrcnn-benchmark).
 
 
 ## Features
