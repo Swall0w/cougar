@@ -18,6 +18,7 @@ class BatchCollator(object):
         transposed_batch = list(zip(*batch))
         images = default_collate(transposed_batch[0])
 #        images = to_image_list(transposed_batch[0], self.size_divisible)
+        # TODO: reshape same size of images
         img_ids = default_collate(transposed_batch[2])
         targets = transposed_batch[1]
 #        img_ids = transposed_batch[2]
