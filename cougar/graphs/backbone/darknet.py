@@ -28,9 +28,9 @@ class DarkResidualBlock(nn.Module):
         return out
 
 
-class Darknet53(nn.Module):
+class Darknet53Extractor(nn.Module):
     def __init__(self, block, num_classes=1000):
-        super(Darknet53, self).__init__()
+        super(Darknet53Extractor, self).__init__()
 
         self.num_classes = num_classes
 
@@ -50,8 +50,8 @@ class Darknet53(nn.Module):
                  ]
             )
         self.features = nn.Sequential(*features)
-        self.global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(1024, self.num_classes)
+#        self.global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+#        self.fc = nn.Linear(1024, self.num_classes)
 
     def forward(self, x):
         out = self.features(x)
@@ -69,4 +69,4 @@ class Darknet53(nn.Module):
 
 
 def darknet53(num_classes):
-    return Darknet53(DarkResidualBlock, num_classes)
+    return Darknet53Extractor(DarkResidualBlock, num_classes)

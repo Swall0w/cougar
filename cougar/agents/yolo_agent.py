@@ -59,6 +59,16 @@ class YOLOAgent(pl.LightningModule):
         self.model.seen += imgs.size(0)
         return {'loss': loss, 'progress': {}}
 
+    def validation_step(self, batch, batch_nb):
+        _, imgs, targets = batch
+        loss, outputs = self.forward(imgs, targets)
+        self.model.seen += imgs.size(0)
+        return {'val_loss': loss}
+
+    def validation_end(self, outputs):
+        avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()
+        return {'avg_val_loss': avg_loss}
+
     def configure_optimizers(self):
         return [torch.optim.Adam(self.model.parameters())]
 
@@ -69,6 +79,19 @@ class YOLOAgent(pl.LightningModule):
             dataset,
             batch_size=self.batch_size,
             shuffle=True,
+            num_workers=self.num_workers,
+            pin_memory=True,
+            collate_fn=dataset.collate_fn,
+        )
+        return dataloader
+
+    @pl.data_loader
+    def val_dataloader(self):
+        dataset = ListDataset(self.valid_path, augment=False, multiscale=self.multiscale_training)
+        dataloader = torch.utils.data.DataLoader(
+            dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
             num_workers=self.num_workers,
             pin_memory=True,
             collate_fn=dataset.collate_fn,

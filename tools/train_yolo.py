@@ -2,15 +2,31 @@ from cougar.agents import YOLOAgent
 import argparse
 from test_tube import Experiment
 import pytorch_lightning as pl
+from pytorch_lightning.callbacks import ModelCheckpoint
+
 
 
 def main():
     args = arg()
-    exp = Experiment(save_dir='./')
+    exp = Experiment(save_dir='./result')
 
     agent = YOLOAgent(args)
 
-    trainer = pl.Trainer(experiment=exp, max_nb_epochs=args.epochs)
+    checkpoint_callback = ModelCheckpoint(
+        filepath='./result',
+        save_best_only=True,
+        verbose=True,
+        monitor='val_loss',
+        mode='min',
+        prefix=''
+    )
+
+    trainer = pl.Trainer(
+        experiment=exp,
+        max_nb_epochs=args.epochs,
+        checkpoint_callback=checkpoint_callback,
+        gpus=1,
+    )
     trainer.fit(agent)
 
 
