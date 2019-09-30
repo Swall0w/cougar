@@ -34,6 +34,7 @@ cougar = {editable = true,path = "."}
 scikit-learn = "*"
 certifi = "*"
 pip = "*"
+pytorch-lightning = "*"
 
 [requires]
 python_version = "3.7"
