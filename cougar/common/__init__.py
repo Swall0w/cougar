@@ -1,4 +1,4 @@
-from cougar.common.loads import read_config, read_labels
+from cougar.common.loads import read_config, read_labels, parse_model_config
 from cougar.common.dumps import dump_config
 from cougar.common.logger import setup_logger
 from cougar.common import comm
@@ -9,6 +9,7 @@ from cougar.common.checkpoint import CheckPointer
 from cougar.common.metric_logger import SmoothedValue, MetricLogger
 
 
-__all__ = ['read_config', 'read_labels', 'dump_config', 'setup_logger', 'comm', 'collect_env_info', 'model_zoo',
+__all__ = ['read_config', 'read_labels', 'parse_model_config', 'dump_config', 'setup_logger', 'comm',
+           'collect_env_info', 'model_zoo',
            'box_utils', 'CheckPointer', 'SmoothedValue', 'MetricLogger',
            ]

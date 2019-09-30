@@ -1,4 +1,5 @@
 from cougar.data.datasets.voc import get_voc
+from cougar.data.datasets.coco_yolo import ListDataset
 from torch.utils.data import ConcatDataset
 
 

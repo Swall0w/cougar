@@ -1,8 +1,10 @@
 from cougar.graphs.models.object_detection import ssd
 from cougar.graphs.models.object_detection.ssd import SSD
+from cougar.graphs.models.object_detection.yolo import Darknet
 
 
 __all__ = ['SSD',
+           'Darknet',
            ]
 
 

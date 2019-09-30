@@ -1,4 +1,4 @@
-from cougar.data.transforms.transforms import Compose, RandomHorizontalFlip, ToTensor
+from cougar.data.transforms.transforms import Compose, RandomHorizontalFlip, ToTensor, horisontal_flip
 
 
 def build_transforms(config, is_train):

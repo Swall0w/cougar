@@ -4,6 +4,12 @@ import torch
 from torchvision.transforms import functional as F
 
 
+def horisontal_flip(images, targets):
+    images = torch.flip(images, [-1])
+    targets[:, 2] = 1 - targets[:, 2]
+    return images, targets
+
+
 class Compose(object):
     def __init__(self, transforms):
         self.transforms = transforms
