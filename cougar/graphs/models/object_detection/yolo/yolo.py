@@ -57,11 +57,11 @@ def create_modules(module_defs):
         elif module_def["type"] == "route":
             layers = [int(x) for x in module_def["layers"].split(",")]
             filters = sum([output_filters[1:][i] for i in layers])
-            modules.add_module(f"route_{module_i}", EmptyLayer())
+            modules.add_module(f"route_{module_i}", nn.Sequential())
 
         elif module_def["type"] == "shortcut":
             filters = output_filters[1:][int(module_def["from"])]
-            modules.add_module(f"shortcut_{module_i}", EmptyLayer())
+            modules.add_module(f"shortcut_{module_i}", nn.Sequential())
 
         elif module_def["type"] == "yolo":
             anchor_idxs = [int(x) for x in module_def["mask"].split(",")]
@@ -78,6 +78,12 @@ def create_modules(module_defs):
         module_list.append(modules)
         output_filters.append(filters)
 
+    # hyperparams:
+    # {'type': 'net', 'batch': '16', 'subdivisions': '1', 'width': '416', 'height': '416', 'channels': '3',
+    #  'momentum': '0.9', 'decay': '0.0005', 'angle': '0', 'saturation': '1.5', 'exposure': '1.5', 'hue': '.1',
+    #  'learning_rate': '0.001', 'burn_in': '1000', 'max_batches': '500200', 'policy': 'steps',
+    #  'steps': '400000,450000', 'scales': '.1,.1'}
+
     return hyperparams, module_list
 
 
@@ -92,13 +98,6 @@ class Upsample(nn.Module):
     def forward(self, x):
         x = F.interpolate(x, scale_factor=self.scale_factor, mode=self.mode)
         return x
-
-
-class EmptyLayer(nn.Module):
-    """Placeholder for 'route' and 'shortcut' layers"""
-
-    def __init__(self):
-        super(EmptyLayer, self).__init__()
 
 
 class YOLOLayer(nn.Module):
@@ -134,8 +133,6 @@ class YOLOLayer(nn.Module):
 
         # Tensors for cuda support
         FloatTensor = torch.cuda.FloatTensor if x.is_cuda else torch.FloatTensor
-        LongTensor = torch.cuda.LongTensor if x.is_cuda else torch.LongTensor
-        ByteTensor = torch.cuda.ByteTensor if x.is_cuda else torch.ByteTensor
 
         self.img_dim = img_dim
         num_samples = x.size(0)
@@ -188,6 +185,7 @@ class YOLOLayer(nn.Module):
 
             obj_mask = obj_mask.bool()
             noobj_mask = noobj_mask.bool()
+
             # Loss : Mask outputs to ignore non-existing objects (except with conf. loss)
             loss_x = self.mse_loss(x[obj_mask], tx[obj_mask])
             loss_y = self.mse_loss(y[obj_mask], ty[obj_mask])
@@ -237,8 +235,11 @@ class Darknet(nn.Module):
     def __init__(self, config_path, img_size=416):
         super(Darknet, self).__init__()
         self.module_defs = parse_model_config(config_path)
+#        self.hyperparams, self.module_list = create_modules(self.module_defs)
         self.hyperparams, self.module_list = create_modules(self.module_defs)
         self.yolo_layers = [layer[0] for layer in self.module_list if hasattr(layer[0], "metrics")]
+        print([layer for layer in self.module_list if hasattr(layer[0], "metrics")])
+        print(self.yolo_layers)
         self.img_size = img_size
         self.seen = 0
         self.header_info = np.array([0, 0, 0, self.seen, 0], dtype=np.int32)
